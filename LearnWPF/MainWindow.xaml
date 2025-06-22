@@ -7,6 +7,21 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition />
+            <RowDefinition />            
+        </Grid.RowDefinitions>
+        <TextBlock Grid.Row="0" 
+                   Name="Counter"
+                   Text="0" 
+                   FontSize="50"
+                   VerticalAlignment="Center"
+                   HorizontalAlignment="Center"/>
+        <Button Grid.Row="1"                
+                Name="Increment"
+                Content="Push Mt"
+                VerticalAlignment="Stretch"
+                HorizontalAlignment="Stretch" Click="Increment_Click" FontSize="50" />
 
     </Grid>
 </Window>
