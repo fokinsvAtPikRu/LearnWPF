@@ -16,13 +16,20 @@ namespace Lesson1Task2
     /// </summary>
     public partial class MainWindow : Window
     {
-        private CircularList<(Ellipse,Brush)> colorList = new CircularList<(Ellipse, Brush)>();
+        private CircularListWithYeldReturn<(Ellipse,Brush)> colorList = new CircularListWithYeldReturn<(Ellipse, Brush)>();
         private IEnumerator<(Ellipse, Brush)> enumerator;
         public MainWindow()
         {
             InitializeComponent();
-            colorList = 
-                new CircularList<(Ellipse, Brush)>((Red,Brushes.Red), (Yellow, Brushes.Yellow), (Green, Brushes.Green));
+            // непосредственная реализация Enumerator
+
+            //colorList = 
+            //    new CircularList<(Ellipse, Brush)>((Red,Brushes.Red), (Yellow, Brushes.Yellow), (Green, Brushes.Green));
+            //enumerator = colorList.GetEnumerator();
+
+            // Enumerator через yield return
+            colorList =
+                new CircularListWithYeldReturn<(Ellipse, Brush)>((Red, Brushes.Red), (Yellow, Brushes.Yellow), (Green, Brushes.Green));
             enumerator = colorList.GetEnumerator();
         }
 
