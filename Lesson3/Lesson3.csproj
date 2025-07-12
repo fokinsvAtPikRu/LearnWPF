@@ -9,7 +9,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="ViewModel\Новая папка\" />
+    <Compile Remove="ViewModel\Новая папка\**" />
+    <EmbeddedResource Remove="ViewModel\Новая папка\**" />
+    <None Remove="ViewModel\Новая папка\**" />
+    <Page Remove="ViewModel\Новая папка\**" />
   </ItemGroup>
 
 </Project>

@@ -17,5 +17,7 @@ namespace Lesson3.Model
                 throw new ArgumentException();
             Duration = duration;
         }
+        public override string ToString()  => Name;
+        
     }
 }

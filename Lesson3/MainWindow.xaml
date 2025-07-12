@@ -40,8 +40,9 @@
         
         <CheckBox Grid.Row="6" VerticalAlignment="Bottom"          
                   IsChecked="{Binding ConsentDataProcessing}"
-                  Content="Я согласен ан обработку данных"/>
-        <Button Grid.Row="7" Content="Записаться" Margin="5" Padding="10" />
+                  Content="Я согласен на обработку данных"/>
+        <Button Grid.Row="7" Content="Записаться" Margin="5" Padding="10" 
+                Command="{Binding JoinCourseCommand}"/>
 
     </Grid>
 </Window>

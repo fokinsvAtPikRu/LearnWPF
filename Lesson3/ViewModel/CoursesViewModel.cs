@@ -3,106 +3,132 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Data;
+using System.Windows.Input;
 
 namespace Lesson3.ViewModel
 {
-    internal class CoursesViewModel : DependencyObject
+    internal class CoursesViewModel : INotifyPropertyChanged
     {
+        #region
+        public ICommand JoinCourseCommand { get; }
 
+        private bool NotifyCanExecuteChanged()
+        {
+            if (!string.IsNullOrWhiteSpace(StudentName) &&
+                FacultySelected >= 0 &&
+                CourseSelected != null &&
+                ConsentDataProcessing)
+                return true;
+            return false;
+        }
 
+        private void Execute()
+        {
+            MessageBox.Show($"Студент: {StudentName}\nФакультет: {FacultySelected}\nКурс: {CourseSelected}", "Данные отправлены");
+        }
+        private bool CanExecute()
+        {
+            if (!string.IsNullOrWhiteSpace(StudentName) &&
+                FacultySelected >= 0 &&
+                CourseSelected != null &&
+                ConsentDataProcessing)
+                return true;
+            return false;
+        }
+        #endregion
+
+        public event PropertyChangedEventHandler? PropertyChanged;
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+        private string _studentName;
         public string StudentName
         {
-            get { return (string)GetValue(StudentNameProperty); }
-            set { SetValue(StudentNameProperty, value); }
+            get => _studentName;
+            set
+            {
+                _studentName = value;
+                OnPropertyChanged();
+                ((RelayCommand)JoinCourseCommand).NotifyCanExecuteChanged();
+            }
         }
-
-        // Using a DependencyProperty as the backing store for StudentName.  This enables animation, styling, binding, etc...
-        public static readonly DependencyProperty StudentNameProperty =
-            DependencyProperty.Register("StudentName", typeof(string), typeof(CoursesViewModel), new PropertyMetadata(""));
-
-
+        private int _facultySelected;
         public int FacultySelected
         {
-            get { return (int)GetValue(FacultySelectedProperty); }
-            set { SetValue(FacultySelectedProperty, value); }
-        }
-
-        // Using a DependencyProperty as the backing store for FilterText.  This enables animation, styling, binding, etc...
-        public static readonly DependencyProperty FacultySelectedProperty =
-            DependencyProperty.Register("FacultySelected", typeof(int), typeof(CoursesViewModel), new PropertyMetadata(-1, OnFacultySelectedChanged));
-
-        private static void OnFacultySelectedChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            var vm= (CoursesViewModel)d;
-            vm.UpdateCorses();
-        }
-
-        private void UpdateCorses()
-        {
-            if (FacultySelected > -1)
+            get => _facultySelected;
+            set
             {
-                ItemsCourses = CollectionViewSource.GetDefaultView(FaculityCourses.GetCourses(FacultySelected));
+                _facultySelected = value;
+                OnPropertyChanged();
+                UpdateCourses();
+                ((RelayCommand)JoinCourseCommand).NotifyCanExecuteChanged();
             }
-            else
-                ItemsCourses = null;
         }
-
+        
+        private Course _courseSelected;
         public Course CourseSelected
         {
-            get { return (Course)GetValue(CourseSelectedProperty); }
-            set { SetValue(CourseSelectedProperty, value); }
+            get => _courseSelected;
+            set
+            {
+                _courseSelected = value;
+                OnPropertyChanged();
+                ((RelayCommand)JoinCourseCommand).NotifyCanExecuteChanged();
+            }
         }
-
-        // Using a DependencyProperty as the backing store for CourseSelected.  This enables animation, styling, binding, etc...
-        public static readonly DependencyProperty CourseSelectedProperty =
-            DependencyProperty.Register("CourseSelected", typeof(Course), typeof(CoursesViewModel), new PropertyMetadata(null));
-
-
-
+        private ICollectionView _itemsFaculty;
         public ICollectionView ItemsFaculty
         {
-            get { return (ICollectionView)GetValue(ItemsFacultyProperty); }
-            set { SetValue(ItemsFacultyProperty, value); }
+            get => _itemsFaculty;
+            set
+            {
+                _itemsFaculty = value;
+                OnPropertyChanged();
+                ((RelayCommand)JoinCourseCommand).NotifyCanExecuteChanged();
+            }
         }
-
-        // Using a DependencyProperty as the backing store for MyProperty.  This enables animation, styling, binding, etc...
-        public static readonly DependencyProperty ItemsFacultyProperty =
-            DependencyProperty.Register("ItemsFaculty", typeof(ICollectionView), typeof(CoursesViewModel), new PropertyMetadata(null));
-
-
-
+        private ICollectionView _itemsCourses;
         public ICollectionView ItemsCourses
         {
-            get { return (ICollectionView)GetValue(ItemsCoursesProperty); }
-            set { SetValue(ItemsCoursesProperty, value); }
+            get => _itemsCourses;
+            set
+            {
+                _itemsCourses = value;
+                OnPropertyChanged();
+                ((RelayCommand)JoinCourseCommand).NotifyCanExecuteChanged();
+            }
         }
-
-        // Using a DependencyProperty as the backing store for ItemsCourses.  This enables animation, styling, binding, etc...
-        public static readonly DependencyProperty ItemsCoursesProperty =
-            DependencyProperty.Register("ItemsCourses", typeof(ICollectionView), typeof(CoursesViewModel), new PropertyMetadata(null));
-
-
-
+        private bool _consentDataProcessing;
         public bool ConsentDataProcessing
         {
-            get { return (bool)GetValue(ConsentDataProcessingProperty); }
-            set { SetValue(ConsentDataProcessingProperty, value); }
+            get => _consentDataProcessing;
+            set
+            {
+                _consentDataProcessing = value;
+                OnPropertyChanged();
+                ((RelayCommand)JoinCourseCommand).NotifyCanExecuteChanged();
+            }
         }
 
-        // Using a DependencyProperty as the backing store for ConsentDataProcessing.  This enables animation, styling, binding, etc...
-        public static readonly DependencyProperty ConsentDataProcessingProperty =
-            DependencyProperty.Register("ConsentDataProcessing", typeof(bool), typeof(CoursesViewModel), new PropertyMetadata(true));
-
-
-
         public CoursesViewModel()
-        {            
+        {
+            JoinCourseCommand = new RelayCommand(Execute, CanExecute);
             ItemsFaculty = CollectionViewSource.GetDefaultView(FaculityCourses.GetFaculty());
-            ItemsCourses = null;           
+            ItemsCourses = CollectionViewSource.GetDefaultView(FaculityCourses.GetCourses(0));            
+        }
+
+        private void UpdateCourses()
+        {
+            ItemsCourses = FacultySelected >= 0
+                ? CollectionViewSource.GetDefaultView(FaculityCourses.GetCourses(FacultySelected))
+                : null;
+            OnPropertyChanged(nameof(ItemsCourses));
         }
     }
 }
