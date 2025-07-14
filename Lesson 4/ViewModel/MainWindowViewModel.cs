@@ -35,12 +35,9 @@ namespace Lesson_4.ViewModel
         public ICommand OnClickCommand { get; }
 
         private void Execute()
-        {            
-            if(this._button.GetContext()=="ON")
-                this._button.SetState(new  Model.OffStateButton());
-            else
-                this._button.SetState(new Model.OnStateButton());            
+        {                 
 
+            this._button.Click();
             this.ContextButton = this._button.GetContext();
             this.ColorButton = this._button.GetColor();
         }

@@ -6,7 +6,7 @@ namespace Lesson_4.Model
     {
         public void Click(Button button)
         {
-            button.SetState(new OnStateButton());           
+            button.SetState(new OffStateButton());           
         }
 
         public string Context()
