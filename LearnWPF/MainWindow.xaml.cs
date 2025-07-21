@@ -20,5 +20,13 @@ namespace LearnWPF
         {
             InitializeComponent();
         }
+
+        private void Increment_Click(object sender, RoutedEventArgs e)
+        {
+            int iterator = Convert.ToInt32(Counter.Text);
+            iterator++;
+            Counter.Text=iterator.ToString();
+        }
+        
     }
 }
