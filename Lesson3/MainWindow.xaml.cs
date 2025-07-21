@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using Lesson3.ViewModel;
+using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -9,7 +10,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace LearnWPF
+namespace Lesson3
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
@@ -19,14 +20,13 @@ namespace LearnWPF
         public MainWindow()
         {
             InitializeComponent();
+            Loaded += MainWindow_Loaded;
+            
         }
 
-        private void Increment_Click(object sender, RoutedEventArgs e)
+        private void MainWindow_Loaded(object sender, RoutedEventArgs e)
         {
-            int iterator = Convert.ToInt32(Counter.Text);
-            iterator++;
-            Counter.Text=iterator.ToString();
+            DataContext= new CoursesViewModel();
         }
-        
     }
 }
