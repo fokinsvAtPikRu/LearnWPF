@@ -4,19 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Lesson8.Model
+namespace Lesson8.Domain.Model
 {
     public class Product
     {
         public int Id { get; set; }
         public string Name { get; set; }
         public int Price { get; set; }
-        public string Image { get; set; }
-        public Product( string name, int price, string image )
-        {
-            Name = name;
-            Price = price;
-            Image = image;
-        }
+        public string Image { get; set; }        
     }
 }

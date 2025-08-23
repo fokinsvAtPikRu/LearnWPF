@@ -1,4 +1,5 @@
-﻿using Lesson8.Model;
+﻿using Lesson8.Domain.Model;
+
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
@@ -20,19 +21,7 @@ namespace Lesson8
         public MainWindow()
         {
             InitializeComponent();
-            using (ApplicationContext db = new ApplicationContext())
-            {
-                var product0 = new Product("apple", 1, "");
-                var product1 = new Product("fridge", 10, "");
-                var product2 = new Product("banana", 2, "");
-                var product3 = new Product("vacuum clenear", 5, "");
-
-                db.Products.Add(product0);
-                db.Products.Add(product1);
-                db.Products.Add(product2);
-                db.Products.Add(product3);
-                db.SaveChanges();                
-            }
+            
         }
     }
 }
