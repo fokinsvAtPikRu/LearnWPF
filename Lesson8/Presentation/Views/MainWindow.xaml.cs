@@ -11,7 +11,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace Lesson8
+namespace Lesson8.Presentation.Views
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml

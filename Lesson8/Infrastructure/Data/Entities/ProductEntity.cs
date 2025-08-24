@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Lesson8.Domain.Model;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Lesson8.Infrastructure.Data.Entities
@@ -15,7 +16,13 @@ namespace Lesson8.Infrastructure.Data.Entities
         [Required]
         public int Price { get; set; }
 
+        [ForeignKey("Category")]
+        [Column("Category_id")]
+        public Category CategoryId { get; set; }
+
         [Required]
         public string Image { get; set; }
+
+        public virtual CategoryEntity CategoryEntity { get; set; }
     }
 }
