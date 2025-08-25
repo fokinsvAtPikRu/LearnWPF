@@ -18,7 +18,7 @@ namespace Lesson8.Infrastructure.Data.Entities
 
         [ForeignKey("Category")]
         [Column("Category_id")]
-        public Category CategoryId { get; set; }
+        public int CategoryId { get; set; }
 
         [Required]
         public string Image { get; set; }

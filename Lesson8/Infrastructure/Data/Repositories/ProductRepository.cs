@@ -36,7 +36,7 @@ namespace Lesson8.Infrastructure.Data.Repositories
             
         }
 
-        public async Task<IEnumerable<Product>> GetAllProdictAsync()
+        public async Task<IEnumerable<Product>> GetAllProductAsync()
         {
             var entities = await _context.ProductsEntity.ToListAsync();
             return entities.Select(MapToDomain);
@@ -51,12 +51,11 @@ namespace Lesson8.Infrastructure.Data.Repositories
         public async Task UpdateProductAsync(Product product)
         {
             var entity= await _context.ProductsEntity.FindAsync(product.Id);
-
             if (entity != null)
             {
                 entity.Name = product.Name;
                 entity.Price = product.Price;
-                entity.CategoryId = product.Category;
+                entity.CategoryId = product.CategoryId;
                 entity.Image = product.Image;
                 await _context.SaveChangesAsync();                
             }
@@ -67,7 +66,12 @@ namespace Lesson8.Infrastructure.Data.Repositories
             Id = entity.Id,
             Name = entity.Name,
             Price = entity.Price,
-            Category=entity.CategoryId,
+            CategoryId=entity.CategoryId,
+            Category=new()
+            {
+                Id = entity.CategoryId,
+                Name = entity.CategoryEntity.Name
+            },
             Image = entity.Image
         };
 
@@ -76,7 +80,7 @@ namespace Lesson8.Infrastructure.Data.Repositories
             Id = product.Id,
             Name = product.Name,
             Price = product.Price,
-            CategoryId=product.Category,
+            CategoryId=product.CategoryId,
             Image = product.Image
         };
             

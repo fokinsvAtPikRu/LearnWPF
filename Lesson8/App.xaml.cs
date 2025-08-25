@@ -25,6 +25,11 @@ namespace Lesson8
 
             var services = new ServiceCollection();
             ConfigureServices(services);
+
+            _serviceProvider = services.BuildServiceProvider();
+
+            var mainWindow=_serviceProvider.GetRequiredService<MainWindow>();
+            mainWindow.Show();
         }
 
         private void ConfigureServices(IServiceCollection services)
@@ -40,6 +45,7 @@ namespace Lesson8
 
             // Repositories
             services.AddScoped<IProductRepository, ProductRepository>();
+            services.AddScoped<ICategoryRepository, CategoryRepository>();
 
             // ViewsModels
             services.AddTransient<ProductViewModel>();

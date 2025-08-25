@@ -11,10 +11,26 @@ namespace Lesson8.Presentation.ViewsModels
     public class ProductViewModel : INotifyPropertyChanged
     {
 
-        private readonly IProductRepository _repository;
+        private readonly IProductRepository _productRepository;
         private Product _selectedProduct;
 
+        public ProductViewModel(IProductRepository productRepository)
+        {
+            _productRepository = productRepository;
+        }
+
         public ObservableCollection<Product> Products { get; } = new ObservableCollection<Product>();
+        private async Task LoadProductAsync()
+        {
+            var products = await _productRepository.GetAllProductAsync();
+            Products.Clear();
+            foreach (var product in products)
+            {
+                Products.Add(product);
+            }
+        }
+
+
 
         public Product SelectedProduct
         {
@@ -32,15 +48,7 @@ namespace Lesson8.Presentation.ViewsModels
         public RelayCommand LoadProductCommand { get; }
         public RelayCommand AddProductCommand { get; }
 
-        private async Task LoadProductAsync()
-        {
-            var products = await _repository.GetAllProdictAsync();
-            Products.Clear();
-            foreach (var product in products)
-            {
-                Products.Add(product);
-            }
-        }
+        
 
         public event PropertyChangedEventHandler? PropertyChanged;
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
