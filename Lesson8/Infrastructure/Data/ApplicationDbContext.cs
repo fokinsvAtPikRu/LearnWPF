@@ -13,7 +13,7 @@ namespace Lesson8.Infrastructure.Data
         {
             base.OnModelCreating(modelBuilder);
             modelBuilder.Entity<CategoryEntity>()
-                .HasIndex(p => p.Id)
+                .HasIndex(p => p.Name)
                 .IsUnique();
 
             modelBuilder.Entity<ProductEntity>()

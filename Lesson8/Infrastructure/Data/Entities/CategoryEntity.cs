@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 
 namespace Lesson8.Infrastructure.Data.Entities
 {
+    [Table("Category")]
     public class CategoryEntity
     {
         [Key]

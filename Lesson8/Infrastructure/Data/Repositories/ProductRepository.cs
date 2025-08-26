@@ -13,7 +13,7 @@ namespace Lesson8.Infrastructure.Data.Repositories
             _context = context;
         }
 
-        public async Task AddProductAsync(Product product)
+        public async Task AddProductAsync(Domain.Model.Product product)
         {
             var entity = MapToEntity(product);
             _context.ProductsEntity.Add(entity);
@@ -36,19 +36,24 @@ namespace Lesson8.Infrastructure.Data.Repositories
             
         }
 
-        public async Task<IEnumerable<Product>> GetAllProductAsync()
+        public async Task<IEnumerable<Domain.Model.Product>> GetAllProductAsync()
         {
-            var entities = await _context.ProductsEntity.ToListAsync();
+            var entities = await _context.ProductsEntity
+                .Include(p=>p.CategoryEntity)
+                .ToListAsync();
             return entities.Select(MapToDomain);
         }
 
-        public async Task<Product> GetProductByIdAsync(int id)
+        public async Task<Domain.Model.Product> GetProductByIdAsync(int id)
         {
-           var entity =await _context.ProductsEntity.FindAsync(id);
+           var entity =await _context.ProductsEntity
+                .Include (p=>p.CategoryEntity)
+                .FirstOrDefaultAsync(p=>p.Id==id);
+
            return entity == null ? null : MapToDomain(entity);
         }
 
-        public async Task UpdateProductAsync(Product product)
+        public async Task UpdateProductAsync(Domain.Model.Product product)
         {
             var entity= await _context.ProductsEntity.FindAsync(product.Id);
             if (entity != null)
@@ -61,7 +66,7 @@ namespace Lesson8.Infrastructure.Data.Repositories
             }
         }
 
-        private Product MapToDomain(ProductEntity entity) => new()
+        private Domain.Model.Product MapToDomain(Entities.ProductEntity entity) => new()
         {
             Id = entity.Id,
             Name = entity.Name,
@@ -75,7 +80,7 @@ namespace Lesson8.Infrastructure.Data.Repositories
             Image = entity.Image
         };
 
-        private ProductEntity MapToEntity(Product product) => new()
+        private Entities.ProductEntity MapToEntity(Domain.Model.Product product) => new()
         {
             Id = product.Id,
             Name = product.Name,

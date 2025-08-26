@@ -16,8 +16,19 @@ namespace Lesson8.Presentation.ViewsModels
 
         public ProductViewModel(IProductRepository productRepository)
         {
-            _productRepository = productRepository;
+            _productRepository = productRepository;            
         }
+        public async Task InitializeAsync()
+        {
+            var items = await _productRepository.GetAllProductAsync();
+            foreach (var item in items)
+            {
+                Products.Add(item);
+            }
+        }
+
+        // Commands
+        
 
         public ObservableCollection<Product> Products { get; } = new ObservableCollection<Product>();
         private async Task LoadProductAsync()

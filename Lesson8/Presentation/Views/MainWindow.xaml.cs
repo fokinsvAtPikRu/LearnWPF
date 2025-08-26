@@ -1,15 +1,5 @@
-﻿using Lesson8.Domain.Model;
-
-using System.Text;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+﻿using System.Windows;
+using Lesson8.Presentation.ViewsModels;
 
 namespace Lesson8.Presentation.Views
 {
@@ -18,10 +8,23 @@ namespace Lesson8.Presentation.Views
     /// </summary>
     public partial class MainWindow : Window
     {
-        public MainWindow()
+        public MainWindow(ProductViewModel productViewModel)
         {
             InitializeComponent();
-            
+            DataContext = productViewModel;
+            _ = InitializeViewModelAsync(productViewModel);
+        }
+
+        private async Task InitializeViewModelAsync(ProductViewModel viewModel)
+        {
+            try
+            {
+                await viewModel.InitializeAsync();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Ошибка инициализации: {ex.Message}");
+            }
         }
     }
 }

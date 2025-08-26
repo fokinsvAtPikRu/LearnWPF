@@ -9,7 +9,7 @@
         Title="Products Management" Height="450" Width="800">
     
     <Grid>
-        <ListBox ItemsSource="{Binding Source=Products}">
+        <ListBox ItemsSource="{Binding Products}" DisplayMemberPath="Name">
             
         </ListBox>
 

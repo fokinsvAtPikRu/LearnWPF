@@ -1,14 +1,13 @@
-﻿using System.IO;
-using System.Runtime.CompilerServices;
-using System.Windows;
+﻿using Lesson8.Domain.Interfaces;
 using Lesson8.Infrastructure.Data;
+using Lesson8.Infrastructure.Data.Repositories;
+using Lesson8.Presentation.Views;
+using Lesson8.Presentation.ViewsModels;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Lesson8.Domain.Interfaces;
-using Lesson8.Infrastructure.Data.Repositories;
-using Lesson8.Presentation.ViewsModels;
-using Lesson8.Presentation.Views;
+using System.IO;
+using System.Windows;
 
 
 namespace Lesson8
