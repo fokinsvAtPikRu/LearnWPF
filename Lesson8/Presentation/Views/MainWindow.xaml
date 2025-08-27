@@ -9,8 +9,30 @@
         Title="Products Management" Height="450" Width="800">
     
     <Grid>
-        <ListBox ItemsSource="{Binding Products}" DisplayMemberPath="Name">
-            
+        <ListBox ItemsSource="{Binding Products}">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <Border BorderBrush="Yellow" BorderThickness="1" CornerRadius="10" Padding="10">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition/>                               
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>                            
+                            <Grid Grid.Column="1" Grid.Row="0">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                </Grid.RowDefinitions>                               
+                                <TextBlock Text="{Binding }"
+                            </Grid>
+                            
+                        </Grid>
+                    </Border>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
         </ListBox>
 
     </Grid>
