@@ -9,6 +9,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Presentation\Icons\Icon1.png" />
+    <None Remove="Presentation\Icons\Icon2.png" />
+    <None Remove="Presentation\Icons\Icon3.png" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.8">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -29,6 +35,12 @@
 
   <ItemGroup>
     <Folder Include="Domain\Services\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Presentation\Icons\Icon1.png" />
+    <Resource Include="Presentation\Icons\Icon2.png" />
+    <Resource Include="Presentation\Icons\Icon3.png" />
   </ItemGroup>
 
 </Project>

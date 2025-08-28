@@ -5,35 +5,39 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Lesson8"
         xmlns:vm="clr-namespace:Lesson8.Presentation.ViewsModels"
+        xmlns:y="clr-namespace:Lesson8.Presentation.Views"
         mc:Ignorable="d"
         Title="Products Management" Height="450" Width="800">
-    
+    <Window.Resources>
+
+        <y:CategoryIdConverter x:Key="CategoryIdConverter" />
+        <y:DebugConverter x:Key="DebugConverter" />
+        <DataTemplate x:Key="ListBoxTemplate" >
+            <Border Name="border" BorderBrush="Yellow" BorderThickness="1" CornerRadius="10" Padding="10">
+                <StackPanel Orientation="Horizontal">
+                    <Image Width="100" Height="100" Source="{Binding CategoryId, Converter={StaticResource DebugConverter}}"/>
+                    
+                    <Grid Grid.Column="1" Grid.Row="0">
+                        <Grid.RowDefinitions>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+                        <TextBlock Grid.Row="0" Text="{Binding Name}"/>
+                        <TextBlock Grid.Row="1" Text="{Binding Price}"/>
+                    </Grid>
+                </StackPanel>
+            </Border>
+            <DataTemplate.Triggers>
+                <DataTrigger Binding="{Binding CategoryId}" Value="1">
+                    <Setter TargetName="border" Property="BorderBrush" Value="Red"/>
+                </DataTrigger>
+            </DataTemplate.Triggers>
+        </DataTemplate>
+    </Window.Resources>
     <Grid>
-        <ListBox ItemsSource="{Binding Products}">
-            <ListBox.ItemTemplate>
-                <DataTemplate>
-                    <Border BorderBrush="Yellow" BorderThickness="1" CornerRadius="10" Padding="10">
-                        <Grid>
-                            <Grid.RowDefinitions>
-                                <RowDefinition/>                               
-                            </Grid.RowDefinitions>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition/>
-                                <ColumnDefinition/>
-                            </Grid.ColumnDefinitions>                            
-                            <Grid Grid.Column="1" Grid.Row="0">
-                                <Grid.RowDefinitions>
-                                    <RowDefinition/>
-                                    <RowDefinition/>
-                                </Grid.RowDefinitions>                               
-                                <TextBlock Text="{Binding }"
-                            </Grid>
-                            
-                        </Grid>
-                    </Border>
-                </DataTemplate>
-            </ListBox.ItemTemplate>
-        </ListBox>
+        <ListBox ItemsSource="{Binding Products}"
+                 ItemTemplate="{StaticResource ListBoxTemplate}"/>
+
 
     </Grid>
 </Window>
