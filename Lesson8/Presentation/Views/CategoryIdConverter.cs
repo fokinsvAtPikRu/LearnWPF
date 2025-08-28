@@ -13,10 +13,10 @@ namespace Lesson8.Presentation.Views
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             if ((int)value == 0)
-                return "Presentation/Icons/Icon1.png";
-            if ((int)value == 0)
-                return "Presentation/Icons/Icon2.png";
-            return "Presentation/Icons/Icon3.png";
+                return "/Lesson8;component/Presentation/Icons/Icon1.png";
+            if ((int)value == 1)
+                return "/Lesson8;component/Presentation/Icons/Icon2.png";
+            return "/Lesson8;component/Presentation/Icons/Icon3.png";
         }
         
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
