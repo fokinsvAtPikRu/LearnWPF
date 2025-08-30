@@ -9,9 +9,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Presentation\Icons\banana.png" />
     <None Remove="Presentation\Icons\Icon1.png" />
     <None Remove="Presentation\Icons\Icon2.png" />
     <None Remove="Presentation\Icons\Icon3.png" />
+    <None Remove="Presentation\Icons\image_not_found.png" />
+    <None Remove="Presentation\Icons\smart-fridge.png" />
   </ItemGroup>
 
   <ItemGroup>
@@ -38,6 +41,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Resource Include="Presentation\Icons\banana.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
     <Resource Include="Presentation\Icons\Icon1.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
@@ -46,6 +52,12 @@
     </Resource>
     <Resource Include="Presentation\Icons\Icon3.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Presentation\Icons\image_not_found.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Presentation\Icons\smart-fridge.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
   </ItemGroup>
 

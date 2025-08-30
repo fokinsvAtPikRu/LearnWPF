@@ -8,15 +8,14 @@ using System.Windows.Data;
 
 namespace Lesson8.Presentation.Views
 {
-    public class CategoryIdConverter : IValueConverter
+    public class ProductIdConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if ((int)value == 0)
-                return "/Lesson8;component/Presentation/Icons/Icon1.png";
-            if ((int)value == 1)
-                return "/Lesson8;component/Presentation/Icons/Icon2.png";
-            return "/Lesson8;component/Presentation/Icons/Icon3.png";
+            var path=(string)value;
+            if (String.IsNullOrEmpty(path))
+                return "/Lesson8;component/Presentation/Icons/image_not_found.png";
+            return $"/Lesson8;component{path}";
         }
         
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
