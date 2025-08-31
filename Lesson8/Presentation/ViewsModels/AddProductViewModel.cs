@@ -1,0 +1,113 @@
+﻿using Lesson8.Presentation.Commands;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
+using System.Windows.Input;
+using Lesson8.Domain.Model;
+using Lesson8.Domain.Interfaces;
+using System.Windows;
+using Microsoft.Win32;
+
+namespace Lesson8.Presentation.ViewsModels
+{
+    public class AddProductViewModel : INotifyPropertyChanged
+    {
+        private readonly IProductRepository _productRepository;
+        private readonly ICategoryRepository _categoryRepository;
+        public event PropertyChangedEventHandler? PropertyChanged;
+        public List<Category> Categories { get; } = new List<Category>();
+        public AddProductViewModel(IProductRepository productRepository, ICategoryRepository categoryRepository)
+        {
+            _productRepository = productRepository;
+            _categoryRepository = categoryRepository;
+            AddProductCommand = new RelayCommand(OnAddProductExecute, CanAddProductExecuted);
+            SelectImageCommand = new RelayCommand(OnSelectImageExecute, CanSelectImageExecuted);
+            _ = InitializeAsync();
+        }
+        public async Task InitializeAsync()
+        {
+            try
+            {
+                var categories = await _categoryRepository.GetAllCategoryAsync();
+                foreach (var category in categories)
+                {
+                    Categories.Add(category);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Ошибка инициализации: {ex.Message}");
+            }
+        }
+        private void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+        private string _name;
+        public string Name
+        {
+            get => _name;
+            set
+            {
+                _name = value;
+                OnPropertyChanged();
+            }
+        }
+        private int _price;
+        public int Price
+        {
+            get => _price;
+            set
+            {
+                _price = value;
+                OnPropertyChanged();
+            }
+        }
+        private Category _selectedCategory;
+        public Category SelectedCategory
+        {
+            get => _selectedCategory;
+            set
+            {
+                _selectedCategory = value;
+                OnPropertyChanged();
+            }
+        }
+        private string _imagePath;
+        public ICommand AddProductCommand { get; }
+        
+        private void OnAddProductExecute(object? parameter)
+        {
+            var product = new Product
+            {
+                Name = _name,
+                Price = _price,
+                Category = SelectedCategory,
+                CategoryId = SelectedCategory.Id
+            };
+            _productRepository.AddProductAsync(product);
+        }
+        private bool CanAddProductExecuted(object? parameter)
+        {
+            return !(string.IsNullOrEmpty(Name) &&
+                   Price > 0 &&
+                   SelectedCategory != null);
+        }
+        public ICommand SelectImageCommand { get; }
+        private void OnSelectImageExecute(object? parameter)
+        {
+            var openFileDialog = new OpenFileDialog
+            {
+                Title = "Выберите изображение продукта",
+                Filter = "Изображения (*.jpg;*.jpeg;*.png;*.bmp;*.gif)|*.jpg;*.jpeg;*.png;*.bmp;*.gif|Все файлы (*.*)|*.*",
+                Multiselect = false,
+                CheckFileExists = true,
+                CheckPathExists = true
+            };
+            if (openFileDialog.ShowDialog() == true)
+            {
+                _imagePath = openFileDialog.FileName;
+            }
+        }
+        private bool CanSelectImageExecuted(object? parameter) => true;
+    }
+}

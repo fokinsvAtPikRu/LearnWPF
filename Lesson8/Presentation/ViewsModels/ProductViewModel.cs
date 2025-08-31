@@ -5,32 +5,64 @@ using Lesson8.Domain.Interfaces;
 using Lesson8.Domain.Model;
 using System.Runtime.CompilerServices;
 using Lesson8.Presentation.Commands;
+using Lesson8.Presentation.Views;
+using System.ComponentModel.DataAnnotations;
+using Lesson8.Infrastructure.Factories;
+using System.Windows;
 
 namespace Lesson8.Presentation.ViewsModels
 {
     public class ProductViewModel : INotifyPropertyChanged
     {
-
+        private readonly IWindowFactory _windowFactory;
         private readonly IProductRepository _productRepository;
+        private readonly ICategoryRepository _categoryRepository;
         private Product _selectedProduct;
+        public RelayCommand ShowAddProductWindowCommand { get; }
 
-        public ProductViewModel(IProductRepository productRepository)
+        public ProductViewModel(IProductRepository productRepository, ICategoryRepository categoryRepository, IWindowFactory windowFactory)
         {
-            _productRepository = productRepository;            
+            _windowFactory = windowFactory;
+            _productRepository = productRepository;
+            _categoryRepository = categoryRepository;
+            ShowAddProductWindowCommand = new RelayCommand(ShowAddPoductWindowExecute, CanShowAddProductWindowExecuted);
+            _ = InitializeAsync();
         }
         public async Task InitializeAsync()
         {
-            var items = await _productRepository.GetAllProductAsync();
-            foreach (var item in items)
+            try
             {
-                Products.Add(item);
+                var products = await _productRepository.GetAllProductAsync();
+                foreach (var product in products)
+                {
+                    Products.Add(product);
+                }
+                var categorys = await _categoryRepository.GetAllCategoryAsync();
+                foreach (var category in categorys)
+                {
+                    Categorys.Add(category);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Ошибка инициализации: {ex.Message}");
             }
         }
 
         // Commands
-        
+
+
+        private void ShowAddPoductWindowExecute(object? parameter)
+        {
+            var addProductViewModel = new AddProductViewModel(_productRepository, _categoryRepository);
+            var addProductWindow = _windowFactory.CreateWindow<AddProductWindow>(addProductViewModel);
+            addProductWindow.Owner = Application.Current.MainWindow;
+            addProductWindow.ShowDialog();
+        }
+        private bool CanShowAddProductWindowExecuted(object? parameter) => true;
 
         public ObservableCollection<Product> Products { get; } = new ObservableCollection<Product>();
+        public ObservableCollection<Category> Categorys { get; } = new ObservableCollection<Category>();
         private async Task LoadProductAsync()
         {
             var products = await _productRepository.GetAllProductAsync();
@@ -59,7 +91,7 @@ namespace Lesson8.Presentation.ViewsModels
         public RelayCommand LoadProductCommand { get; }
         public RelayCommand AddProductCommand { get; }
 
-        
+
 
         public event PropertyChangedEventHandler? PropertyChanged;
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)

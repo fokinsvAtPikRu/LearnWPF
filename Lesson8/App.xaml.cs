@@ -1,6 +1,7 @@
 ﻿using Lesson8.Domain.Interfaces;
 using Lesson8.Infrastructure.Data;
 using Lesson8.Infrastructure.Data.Repositories;
+using Lesson8.Infrastructure.Factories;
 using Lesson8.Presentation.Views;
 using Lesson8.Presentation.ViewsModels;
 using Microsoft.EntityFrameworkCore;
@@ -48,9 +49,13 @@ namespace Lesson8
 
             // ViewsModels
             services.AddTransient<ProductViewModel>();
+            services.AddTransient<AddProductViewModel>();
+
 
             // Views
+            services.AddSingleton<IWindowFactory,WindowFactory>();
             services.AddTransient<MainWindow>();
+            services.AddTransient<AddProductWindow>();
         }
 
     }

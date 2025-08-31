@@ -12,19 +12,6 @@ namespace Lesson8.Presentation.Views
         {
             InitializeComponent();
             DataContext = productViewModel;
-            _ = InitializeViewModelAsync(productViewModel);
-        }
-
-        private async Task InitializeViewModelAsync(ProductViewModel viewModel)
-        {
-            try
-            {
-                await viewModel.InitializeAsync();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Ошибка инициализации: {ex.Message}");
-            }
-        }
+        } 
     }
 }

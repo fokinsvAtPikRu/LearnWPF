@@ -9,7 +9,7 @@
         mc:Ignorable="d"
         Title="Products Management" Height="450" Width="800">
     <Window.Resources>
-        <y:ProductIdConverter x:Key="ProductIdConverter" />
+        <y:ProductImageConverter x:Key="ProductImageConverter" />
         <DataTemplate x:Key="ListBoxTemplate" >
             <Border Name="border" BorderBrush="Yellow" BorderThickness="1" CornerRadius="10" Padding="10">
                 <Grid Grid.Column="1" Grid.Row="0">
@@ -19,20 +19,19 @@
                     </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
                         <RowDefinition/>
-                        <RowDefinition/>
+                        <RowDefinition/>                        
+                                               
                     </Grid.RowDefinitions>
                     <Image
                         Grid.Column="0" Grid.Row="0" Grid.RowSpan="2"
                         Width="100" Height="100" 
-                        Source="{Binding Image, Converter={StaticResource ProductIdConverter}}"/>
+                        Source="{Binding Image, Converter={StaticResource ProductImageConverter}}"/>
                     <TextBlock 
-                        Grid.Column="1" Grid.Row="0" 
-                        Margin="50,0" 
-                        Text="{Binding Name}" FontFamily="Arial" FontSize="20"/>
+                        Grid.Column="1" Grid.Row="0"                         
+                        Text="{Binding Name}" />
                     <TextBlock 
-                        Grid.Column="1" Grid.Row="1" 
-                        Margin="50,0" 
-                        Text="{Binding Price}" FontFamily="Arial" FontSize="20"/>
+                        Grid.Column="1" Grid.Row="1"                          
+                        Text="{Binding Price}" />
                 </Grid>
             </Border>
             <DataTemplate.Triggers>
@@ -43,10 +42,18 @@
         </DataTemplate>
     </Window.Resources>
     <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition></ColumnDefinition>
+            <ColumnDefinition></ColumnDefinition>
+        </Grid.ColumnDefinitions>
         <ListBox
+            Grid.Column="0"
             HorizontalContentAlignment="Stretch"
             ItemsSource="{Binding Products}"
             ItemTemplate="{StaticResource ListBoxTemplate}"/>
+        <StackPanel Grid.Column="1">
+            <Button Content="Add Product" Padding="10" Command="{Binding ShowAddProductWindowCommand}"/>
+        </StackPanel>
 
     </Grid>
 </Window>

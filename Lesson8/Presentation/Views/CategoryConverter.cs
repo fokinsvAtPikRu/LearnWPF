@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Lesson8.Domain.Model;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -8,20 +9,17 @@ using System.Windows.Data;
 
 namespace Lesson8.Presentation.Views
 {
-    public class ProductImageConverter : IValueConverter
+    internal class CategoryConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            var path = (string)value;
-            if (String.IsNullOrEmpty(path))
-                return "/Lesson8;component/Presentation/Icons/image_not_found.png";
-            return $"/Lesson8;component{path}";
+            var category=(Category)value;
+            return category.Name;
         }
-        
+
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
             throw new NotImplementedException();
         }
-    }    
-    
+    }
 }
