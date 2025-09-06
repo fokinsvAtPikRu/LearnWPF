@@ -52,7 +52,8 @@
             ItemsSource="{Binding Products}"
             ItemTemplate="{StaticResource ListBoxTemplate}"/>
         <StackPanel Grid.Column="1">
-            <Button Content="Add Product" Padding="10" Command="{Binding ShowAddProductWindowCommand}"/>
+            <Button Content="Add" Padding="10" Command="{Binding ShowAddProductWindowCommand}"/>
+            <Button Content="Delete" Padding="10" Command="{Binding DeleteProductWindowCommand}"/>
         </StackPanel>
 
     </Grid>

@@ -26,9 +26,9 @@
             <RowDefinition/>
         </Grid.RowDefinitions>
         <TextBlock Grid.Row="0" Grid.Column="0" Text="Name" Padding="10"/>
-        <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding Name}" Padding="10"/>
+        <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Padding="10"/>
         <TextBlock Grid.Row="1" Grid.Column="0" Text="Price" Padding="10"/>
-        <TextBox Grid.Row="1" Grid.Column="1" Text="price" Padding="10"/>
+        <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Price, UpdateSourceTrigger=PropertyChanged}" Padding="10"/>
         <TextBlock Grid.Row="2" Grid.Column="0" Text="Category" Padding="10"/>
         <ComboBox Grid.Row="2" Grid.Column="1" 
                   ItemsSource="{Binding Categories}"
@@ -39,6 +39,7 @@
         Command="{Binding SelectImageCommand}" />
         <Button Grid.Column="1" Grid.Row="3" 
                 Content="Add Product" 
-                Command="{Binding AddProductCommand}" />
+                Command="{Binding AddProductCommand}" 
+                CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}"/>
     </Grid>
 </Window>

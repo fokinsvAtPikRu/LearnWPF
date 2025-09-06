@@ -6,6 +6,8 @@ using Lesson8.Domain.Model;
 using Lesson8.Domain.Interfaces;
 using System.Windows;
 using Microsoft.Win32;
+using Microsoft.EntityFrameworkCore.Internal;
+using System.Windows.Controls;
 
 namespace Lesson8.Presentation.ViewsModels
 {
@@ -73,24 +75,45 @@ namespace Lesson8.Presentation.ViewsModels
             }
         }
         private string _imagePath;
+        public string ImagePath
+        {
+            get => _imagePath;
+            set
+            {
+                _imagePath = value;
+                OnPropertyChanged();
+            }
+        }
         public ICommand AddProductCommand { get; }
-        
+
         private void OnAddProductExecute(object? parameter)
         {
+            var window = (Window)parameter;
             var product = new Product
             {
                 Name = _name,
                 Price = _price,
                 Category = SelectedCategory,
-                CategoryId = SelectedCategory.Id
+                CategoryId = SelectedCategory.Id,
+                Image= _imagePath                
             };
-            _productRepository.AddProductAsync(product);
+            try
+            {
+                _productRepository.AddProductAsync(product);
+
+                window.Close();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Ошибка при добавлении продукта: {ex.Message}");
+            }
         }
         private bool CanAddProductExecuted(object? parameter)
         {
-            return !(string.IsNullOrEmpty(Name) &&
-                   Price > 0 &&
-                   SelectedCategory != null);
+            return !string.IsNullOrEmpty(Name)
+                && Price > 0
+                && SelectedCategory != null
+                && !string.IsNullOrEmpty(_imagePath);
         }
         public ICommand SelectImageCommand { get; }
         private void OnSelectImageExecute(object? parameter)

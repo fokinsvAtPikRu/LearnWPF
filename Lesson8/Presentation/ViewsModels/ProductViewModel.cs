@@ -32,11 +32,7 @@ namespace Lesson8.Presentation.ViewsModels
         {
             try
             {
-                var products = await _productRepository.GetAllProductAsync();
-                foreach (var product in products)
-                {
-                    Products.Add(product);
-                }
+                await LoadProductAsync();
                 var categorys = await _categoryRepository.GetAllCategoryAsync();
                 foreach (var category in categorys)
                 {
@@ -48,20 +44,22 @@ namespace Lesson8.Presentation.ViewsModels
                 MessageBox.Show($"Ошибка инициализации: {ex.Message}");
             }
         }
+        
 
         // Commands
 
 
-        private void ShowAddPoductWindowExecute(object? parameter)
+        private async void ShowAddPoductWindowExecute(object? parameter)
         {
             var addProductViewModel = new AddProductViewModel(_productRepository, _categoryRepository);
             var addProductWindow = _windowFactory.CreateWindow<AddProductWindow>(addProductViewModel);
             addProductWindow.Owner = Application.Current.MainWindow;
             addProductWindow.ShowDialog();
+            await LoadProductAsync();
         }
         private bool CanShowAddProductWindowExecuted(object? parameter) => true;
 
-        public ObservableCollection<Product> Products { get; } = new ObservableCollection<Product>();
+        public ObservableCollection<Product> Products { get; set; } = new ObservableCollection<Product>();
         public ObservableCollection<Category> Categorys { get; } = new ObservableCollection<Category>();
         private async Task LoadProductAsync()
         {
@@ -72,9 +70,6 @@ namespace Lesson8.Presentation.ViewsModels
                 Products.Add(product);
             }
         }
-
-
-
         public Product SelectedProduct
         {
             get => _selectedProduct;
