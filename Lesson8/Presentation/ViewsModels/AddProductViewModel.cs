@@ -1,13 +1,11 @@
-﻿using Lesson8.Presentation.Commands;
+﻿using Lesson8.Domain.Interfaces;
+using Lesson8.Domain.Model;
+using Lesson8.Presentation.Commands;
+using Microsoft.Win32;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using System.Windows.Input;
-using Lesson8.Domain.Model;
-using Lesson8.Domain.Interfaces;
 using System.Windows;
-using Microsoft.Win32;
-using Microsoft.EntityFrameworkCore.Internal;
-using System.Windows.Controls;
+using System.Windows.Input;
 
 namespace Lesson8.Presentation.ViewsModels
 {
@@ -84,7 +82,7 @@ namespace Lesson8.Presentation.ViewsModels
                 OnPropertyChanged();
             }
         }
-        public ICommand AddProductCommand { get; }
+        public ICommand AddProductCommand { get; }        
 
         private void OnAddProductExecute(object? parameter)
         {

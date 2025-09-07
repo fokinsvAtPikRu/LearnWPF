@@ -50,12 +50,14 @@ namespace Lesson8
             // ViewsModels
             services.AddTransient<ProductViewModel>();
             services.AddTransient<AddProductViewModel>();
+            services.AddTransient<EditProductsViewModel>();
 
 
             // Views
             services.AddSingleton<IWindowFactory,WindowFactory>();
             services.AddTransient<MainWindow>();
             services.AddTransient<AddProductWindow>();
+            services.AddTransient<EditProductWindow>();
         }
 
     }

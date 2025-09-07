@@ -14,20 +14,45 @@ namespace Lesson8.Presentation.ViewsModels
 {
     public class ProductViewModel : INotifyPropertyChanged
     {
+        #region Fields
         private readonly IWindowFactory _windowFactory;
         private readonly IProductRepository _productRepository;
         private readonly ICategoryRepository _categoryRepository;
         private Product _selectedProduct;
-        public RelayCommand ShowAddProductWindowCommand { get; }
-
+        #endregion
+        #region Properties
+        public ObservableCollection<Product> Products { get; set; } = new ObservableCollection<Product>();
+        public ObservableCollection<Category> Categorys { get; } = new ObservableCollection<Category>();
+        public Product SelectedProduct
+        {
+            get => _selectedProduct;
+            set
+            {
+                _selectedProduct = value;
+                OnPropertyChanged();
+                RemoveProductCommand.RaiseCanExecuteChanged();
+            }
+        }
+        public event PropertyChangedEventHandler? PropertyChanged;
+        
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+        #endregion
+        #region Constructor
         public ProductViewModel(IProductRepository productRepository, ICategoryRepository categoryRepository, IWindowFactory windowFactory)
         {
             _windowFactory = windowFactory;
             _productRepository = productRepository;
             _categoryRepository = categoryRepository;
-            ShowAddProductWindowCommand = new RelayCommand(ShowAddPoductWindowExecute, CanShowAddProductWindowExecuted);
+            ShowAddProductWindowCommand = new AsyncRelayCommand(ShowAddPoductWindowExecute, CanShowAddProductWindowExecuted);
+            ShowEditProductWindowCommand = new RelayCommand(OnEditShowEditProductWindowExecute, CanEditProductShowWindowExecuted);
+            RemoveProductCommand = new AsyncRelayCommand(OnRemoveProuctExecute, CanRemoveProductExecuted);
+
             _ = InitializeAsync();
         }
+        #endregion
         public async Task InitializeAsync()
         {
             try
@@ -46,21 +71,9 @@ namespace Lesson8.Presentation.ViewsModels
         }
         
 
-        // Commands
+        // Commands       
 
-
-        private async void ShowAddPoductWindowExecute(object? parameter)
-        {
-            var addProductViewModel = new AddProductViewModel(_productRepository, _categoryRepository);
-            var addProductWindow = _windowFactory.CreateWindow<AddProductWindow>(addProductViewModel);
-            addProductWindow.Owner = Application.Current.MainWindow;
-            addProductWindow.ShowDialog();
-            await LoadProductAsync();
-        }
-        private bool CanShowAddProductWindowExecuted(object? parameter) => true;
-
-        public ObservableCollection<Product> Products { get; set; } = new ObservableCollection<Product>();
-        public ObservableCollection<Category> Categorys { get; } = new ObservableCollection<Category>();
+        
         private async Task LoadProductAsync()
         {
             var products = await _productRepository.GetAllProductAsync();
@@ -70,28 +83,44 @@ namespace Lesson8.Presentation.ViewsModels
                 Products.Add(product);
             }
         }
-        public Product SelectedProduct
+        
+        
+        #region Commands
+        public AsyncRelayCommand ShowAddProductWindowCommand { get; }
+        private async Task ShowAddPoductWindowExecute(object? parameter)
         {
-            get => _selectedProduct;
-            set
+            var addProductViewModel = new AddProductViewModel(_productRepository, _categoryRepository);
+            var addProductWindow = _windowFactory.CreateWindow<AddProductWindow>(addProductViewModel);
+            addProductWindow.Owner = Application.Current.MainWindow;
+            addProductWindow.ShowDialog();
+            await LoadProductAsync();
+        }
+        private bool CanShowAddProductWindowExecuted(object? parameter) => true;
+        
+        public AsyncRelayCommand RemoveProductCommand { get; }
+        private async Task OnRemoveProuctExecute(object? parameter)
+        {
+            if (_selectedProduct != null)
             {
-                _selectedProduct = value;
-                OnPropertyChanged();
+                var id = _selectedProduct.Id;
+                await _productRepository.DeleteProductAsync(id);
+                MessageBox.Show($"{_selectedProduct.Name} удален");
+                await LoadProductAsync();                
             }
         }
-        public string NewProductName { get; set; }
-        public int NewProductPrice { get; set; }
-        public Category NewProductCategory { get; set; }
-
-        public RelayCommand LoadProductCommand { get; }
-        public RelayCommand AddProductCommand { get; }
-
-
-
-        public event PropertyChangedEventHandler? PropertyChanged;
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        private bool CanRemoveProductExecuted(object? parameter) => _selectedProduct != null;
+        public RelayCommand ShowEditProductWindowCommand { get; }
+        private void OnEditShowEditProductWindowExecute(object? parameter)
         {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+            var editProductViewModel=new EditProductsViewModel(_productRepository, _categoryRepository,_selectedProduct);
+            var editProductWindow=_windowFactory.CreateWindow<EditProductWindow>(editProductViewModel);
+            editProductWindow.Owner = Application.Current.MainWindow;
+            editProductWindow.ShowDialog();
         }
+        private bool CanEditProductShowWindowExecuted(object? parameter) => _selectedProduct!=null;
+
+
+        #endregion
+
     }
 }
