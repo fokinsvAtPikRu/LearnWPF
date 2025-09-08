@@ -15,10 +15,10 @@ namespace Lesson8.Presentation.ViewsModels
         private readonly IProductRepository _productRepository;
         private readonly ICategoryRepository _categoryRepository;
         private Product _product;
-        public List<Category> Categories { get; } =new List<Category>();
+        public List<Category> Categories { get; set; } =new List<Category>();
 
         private void OnPropertyChanged([CallerMemberName] string propertyName = null)
-        {
+        {            
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
         private string _name;
@@ -29,6 +29,7 @@ namespace Lesson8.Presentation.ViewsModels
             {
                 _name = value;
                 OnPropertyChanged();
+                SaveChangedProductCommand.RaiseCanExecuteChanged();
             }
         }
         private int _price;
@@ -39,6 +40,7 @@ namespace Lesson8.Presentation.ViewsModels
             {
                 _price = value;
                 OnPropertyChanged();
+                SaveChangedProductCommand.RaiseCanExecuteChanged();
             }
         }
         private Category _category;
@@ -49,6 +51,7 @@ namespace Lesson8.Presentation.ViewsModels
             {
                 _category = value;
                 OnPropertyChanged();
+                SaveChangedProductCommand.RaiseCanExecuteChanged();
             }
         }
         private string _imagePath;
@@ -59,6 +62,7 @@ namespace Lesson8.Presentation.ViewsModels
             {
                 _imagePath = value;
                 OnPropertyChanged();
+                SaveChangedProductCommand.RaiseCanExecuteChanged();
             }
         }
         public EditProductsViewModel
@@ -73,6 +77,7 @@ namespace Lesson8.Presentation.ViewsModels
             _price=_product.Price;
             _category = _product.Category;
             _imagePath = _product.Image;
+            SaveChangedProductCommand = new AsyncRelayCommand(OnSaveChangedProductExecute, CanSaveChangedProductExecuted);
             _ = InitializeAsync();
         }
         public async Task InitializeAsync()
@@ -84,17 +89,41 @@ namespace Lesson8.Presentation.ViewsModels
                 {
                     Categories.Add(category);
                 }
+                var findingCategory=categories.FirstOrDefault(c=>c.Id==_product.Category.Id);
+                if (findingCategory != null)
+                {
+                    Category = findingCategory;
+                }
             }
             catch (Exception ex)
             {
                 MessageBox.Show($"Ошибка инициализации: {ex.Message}");
             }
         }
-        public readonly AsyncRelayCommand SaveChangedProductCommand;
+        
+        public AsyncRelayCommand SaveChangedProductCommand { get; }
         private async Task OnSaveChangedProductExecute(object? parameter)
         {
-            
+            var window = (Window)parameter;
+            _product.Name = Name;
+            _product.Price = Price;
+            _product.Category = Category;
+            try
+            {
+                await _productRepository.UpdateProductAsync(_product);
+                window.Close();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Ошибка при добавлении продукта: {ex.Message}");
+            }
         }
-
+        private bool CanSaveChangedProductExecuted(object? parameter)
+        {
+            if(_product.Category != null)
+                return true;
+            else
+                return false;
+        }
     }
 }

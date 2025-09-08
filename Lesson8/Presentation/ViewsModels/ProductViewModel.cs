@@ -31,6 +31,7 @@ namespace Lesson8.Presentation.ViewsModels
                 _selectedProduct = value;
                 OnPropertyChanged();
                 RemoveProductCommand.RaiseCanExecuteChanged();
+                ShowEditProductWindowCommand.RaiseCanExecuteChanged();
             }
         }
         public event PropertyChangedEventHandler? PropertyChanged;
@@ -47,7 +48,7 @@ namespace Lesson8.Presentation.ViewsModels
             _productRepository = productRepository;
             _categoryRepository = categoryRepository;
             ShowAddProductWindowCommand = new AsyncRelayCommand(ShowAddPoductWindowExecute, CanShowAddProductWindowExecuted);
-            ShowEditProductWindowCommand = new RelayCommand(OnEditShowEditProductWindowExecute, CanEditProductShowWindowExecuted);
+            ShowEditProductWindowCommand = new AsyncRelayCommand(OnEditShowEditProductWindowExecute, CanEditProductShowWindowExecuted);
             RemoveProductCommand = new AsyncRelayCommand(OnRemoveProuctExecute, CanRemoveProductExecuted);
 
             _ = InitializeAsync();
@@ -109,13 +110,14 @@ namespace Lesson8.Presentation.ViewsModels
             }
         }
         private bool CanRemoveProductExecuted(object? parameter) => _selectedProduct != null;
-        public RelayCommand ShowEditProductWindowCommand { get; }
-        private void OnEditShowEditProductWindowExecute(object? parameter)
+        public AsyncRelayCommand ShowEditProductWindowCommand { get; }
+        private async Task OnEditShowEditProductWindowExecute(object? parameter)
         {
             var editProductViewModel=new EditProductsViewModel(_productRepository, _categoryRepository,_selectedProduct);
             var editProductWindow=_windowFactory.CreateWindow<EditProductWindow>(editProductViewModel);
             editProductWindow.Owner = Application.Current.MainWindow;
             editProductWindow.ShowDialog();
+            await LoadProductAsync();
         }
         private bool CanEditProductShowWindowExecuted(object? parameter) => _selectedProduct!=null;
 

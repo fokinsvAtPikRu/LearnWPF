@@ -25,9 +25,10 @@
         <ComboBox Grid.Row="2" Grid.Column="1" 
           ItemsSource="{Binding Categories}"
           ItemTemplate="{StaticResource ComboBoxTemplate}"
-          SelectedItem="{Binding SelectedCategory, Mode=TwoWay}"/>
+          SelectedItem="{Binding Category, Mode=TwoWay}"/>
         <Button
             Grid.Row="3" Grid.Column="1"
-            Content="OK" Command="{Binding SaveChangedProductCommand}"/>
+            Content="OK" Command="{Binding SaveChangedProductCommand}"
+            CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}"/>
     </Grid>
 </Window>
