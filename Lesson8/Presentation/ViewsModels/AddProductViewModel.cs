@@ -117,8 +117,8 @@ namespace Lesson8.Presentation.ViewsModels
         public ICommand SelectImageCommand { get; }
         private void OnSelectImageExecute(object? parameter)
         {
-            string _projectDirectory = Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\..\..\"));
-            string targetDirectory = Path.Combine(_projectDirectory, "Presentation", "Icons");
+            // string _projectDirectory = Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\..\..\"));
+            string targetDirectory = Path.Combine(/*_projectDirectory, */"Presentation", "Icons");
             var openFileDialog = new OpenFileDialog
             {
                 Title = "Выберите изображение продукта",
@@ -131,7 +131,8 @@ namespace Lesson8.Presentation.ViewsModels
             };
             if (openFileDialog.ShowDialog() == true)
             {
-                _imagePath = openFileDialog.FileName;
+                string fileName=openFileDialog.SafeFileName;
+                ImagePath = $"/Presetation/Icons/{fileName}";
             }
         }
         private bool CanSelectImageExecuted(object? parameter) => true;
