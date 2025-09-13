@@ -29,10 +29,10 @@
                   ItemsSource="{Binding Categories}"
                   ItemTemplate="{StaticResource ComboBoxTemplate}"
                   SelectedItem="{Binding SelectedCategory, Mode=TwoWay}"/>
-        <Button Grid.Column="0" Grid.Row="3" 
+        <Button Grid.Column="0" Grid.Row="3" Margin="20"
         Content="Select Image" 
         Command="{Binding SelectImageCommand}" />
-        <Button Grid.Column="1" Grid.Row="3" 
+        <Button Grid.Column="1" Grid.Row="3" Margin="20"
                 Content="Add Product" 
                 Command="{Binding AddProductCommand}" 
                 CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}"/>

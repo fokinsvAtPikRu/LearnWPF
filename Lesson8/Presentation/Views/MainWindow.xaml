@@ -53,10 +53,9 @@
             SelectionMode="Single"
             SelectedItem="{Binding SelectedProduct}"/>
         <StackPanel Grid.Column="1">
-            <Button Content="Add Product" Padding="10" Command="{Binding ShowAddProductWindowCommand}"/>
-            <Button Content="Add Category" Padding="10" Command="{Binding ShowAddCategoryCommand}"/>
-            <Button Content="Edit Product" Padding="10" Command="{Binding ShowEditProductWindowCommand}"/>            
-            <Button Content="Delete" Padding="10" Command="{Binding RemoveProductCommand}"/>
+            <Button Content="Add Product" Margin="10" Padding="10" Command="{Binding ShowAddProductWindowCommand}"/>            
+            <Button Content="Edit Product" Margin="10" Padding="10" Command="{Binding ShowEditProductWindowCommand}"/>            
+            <Button Content="Delete" Margin="10" Padding="10" Command="{Binding RemoveProductCommand}"/>
         </StackPanel>
 
     </Grid>

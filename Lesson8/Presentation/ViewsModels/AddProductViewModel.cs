@@ -3,6 +3,7 @@ using Lesson8.Domain.Model;
 using Lesson8.Presentation.Commands;
 using Microsoft.Win32;
 using System.ComponentModel;
+using System.IO;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Input;
@@ -116,13 +117,17 @@ namespace Lesson8.Presentation.ViewsModels
         public ICommand SelectImageCommand { get; }
         private void OnSelectImageExecute(object? parameter)
         {
+            string _projectDirectory = Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\..\..\"));
+            string targetDirectory = Path.Combine(_projectDirectory, "Presentation", "Icons");
             var openFileDialog = new OpenFileDialog
             {
                 Title = "Выберите изображение продукта",
                 Filter = "Изображения (*.jpg;*.jpeg;*.png;*.bmp;*.gif)|*.jpg;*.jpeg;*.png;*.bmp;*.gif|Все файлы (*.*)|*.*",
                 Multiselect = false,
                 CheckFileExists = true,
-                CheckPathExists = true
+                CheckPathExists = true,
+                InitialDirectory = targetDirectory,
+                RestoreDirectory = true
             };
             if (openFileDialog.ShowDialog() == true)
             {
