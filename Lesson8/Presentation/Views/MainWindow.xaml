@@ -1,0 +1,62 @@
+﻿<Window x:Class="Lesson8.Presentation.Views.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Lesson8"
+        xmlns:vm="clr-namespace:Lesson8.Presentation.ViewsModels"
+        xmlns:y="clr-namespace:Lesson8.Presentation.Views"
+        mc:Ignorable="d"
+        Title="Products Management" Height="450" Width="800">
+    <Window.Resources>
+        <y:ProductImageConverter x:Key="ProductImageConverter" />
+        <DataTemplate x:Key="ListBoxTemplate" >
+            <Border Name="border" BorderBrush="Yellow" BorderThickness="1" CornerRadius="10" Padding="10">
+                <Grid Grid.Column="1" Grid.Row="0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition/>       
+                    </Grid.RowDefinitions>
+                    <Image
+                        Grid.Column="0" Grid.Row="0" Grid.RowSpan="2"
+                        Width="100" Height="100" 
+                        Source="{Binding Image, Converter={StaticResource ProductImageConverter}}"/>
+                    <TextBlock 
+                        Grid.Column="1" Grid.Row="0"                         
+                        Text="{Binding Name}" />
+                    <TextBlock 
+                        Grid.Column="1" Grid.Row="1"                          
+                        Text="{Binding Price}" />
+                </Grid>
+            </Border>
+            <DataTemplate.Triggers>
+                <DataTrigger Binding="{Binding CategoryId}" Value="1">
+                    <Setter TargetName="border" Property="BorderBrush" Value="Red"/>
+                </DataTrigger>
+            </DataTemplate.Triggers>
+        </DataTemplate>
+    </Window.Resources>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition></ColumnDefinition>
+            <ColumnDefinition></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <ListBox
+            Grid.Column="0"
+            HorizontalContentAlignment="Stretch"
+            ItemsSource="{Binding Products, Mode=TwoWay}"
+            ItemTemplate="{StaticResource ListBoxTemplate}"
+            SelectionMode="Single"
+            SelectedItem="{Binding SelectedProduct}"/>
+        <StackPanel Grid.Column="1">
+            <Button Content="Add Product" Margin="10" Padding="10" Command="{Binding ShowAddProductWindowCommand}"/>            
+            <Button Content="Edit Product" Margin="10" Padding="10" Command="{Binding ShowEditProductWindowCommand}"/>            
+            <Button Content="Delete" Margin="10" Padding="10" Command="{Binding RemoveProductCommand}"/>
+        </StackPanel>
+
+    </Grid>
+</Window>
